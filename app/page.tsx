@@ -1,15 +1,20 @@
-import { signInAction } from "@/actions/auth-actions";
-import { Button } from "@/components/ui/button";
+import { auth } from "@/auth";
+import { SessionProvider } from "next-auth/react";
+import Login  from "@/components/login";
+export default async function Home() {
+  const session = await auth();
 
-export default function Home() {
+  if (session?.user) {
+    session.user = {
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+    };
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col items-center sm:items-start">
-          <h1>Login</h1>
-          <form action={signInAction}>
-            <Button type="submit">Sign in with Google</Button>
-          </form>
-      </main>
-    </div>
-  );
+    <SessionProvider session={session}>
+      <Login />
+    </SessionProvider>
+  )
 }
