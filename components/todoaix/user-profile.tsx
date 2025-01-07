@@ -5,6 +5,7 @@ import React from "react"
 
 export default function UserProfile() {
   const session = useSession();
+  console.log(session);
   if (!session) {
     return null;
   }
