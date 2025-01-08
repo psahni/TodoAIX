@@ -1,8 +1,6 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import prisma from "./prisma/client";
-
-const JWT_SECRET = process.env.JWT_SECRET;
 const SESSION_DURATION = 24*60*60;
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -29,8 +27,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.id = token.id as string; // Add user ID to the session object
       return session;
     },
-    async signIn({ user }) {
+    async signIn({ user, profile, account }) {
       const existinguser = await prisma.user.findUnique({where: { email: user.email as string },})
+      console.log("Sign in callback");
+      console.log(existinguser);
+      console.log(user, profile, account);
       if (!existinguser) {
         await prisma.user.upsert({
           where: {
@@ -39,9 +40,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           create: {
             email: user.email as string,
             name: user.name,
+            image: user.image,
           },
           update: {
             name: user.name,
+            image: user.image,
           },
         })
       }
