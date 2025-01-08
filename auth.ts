@@ -32,15 +32,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user }) {
       const existinguser = await prisma.user.findUnique({where: { email: user.email as string },})
       if (!existinguser) {
-        await prisma.user.create({
-          data: {
+        await prisma.user.upsert({
+          where: {
+            email: user.email as string,
+          },
+          create: {
             email: user.email as string,
             name: user.name,
-            image: user.image,
-          }
+          },
+          update: {
+            name: user.name,
+          },
         })
       }
-
       return true; // Allow sign-in
     }
   },
