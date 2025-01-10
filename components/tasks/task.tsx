@@ -1,8 +1,10 @@
+'use client';
+
 import clsx from "clsx";
 import { Checkbox } from "../ui/checkbox";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
-export default function Task({ taskName, id, isCompleted }: { taskName: string; id: number; isCompleted: boolean }) {
+export default function Task({ taskName, id, isCompleted, handleOnChange }: { taskName: string; id: number; isCompleted: boolean; handleOnChange: () => void }) {
   return (
     <div
       key={id}
@@ -19,6 +21,7 @@ export default function Task({ taskName, id, isCompleted }: { taskName: string; 
                   "data-[state=checked]:bg-gray-300 border-gray-300"
               )}
               checked={isCompleted}
+              onCheckedChange={handleOnChange}
             />
             <DialogTrigger asChild>
               <div className="flex flex-col items-start">
