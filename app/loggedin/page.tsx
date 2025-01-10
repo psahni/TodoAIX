@@ -1,8 +1,6 @@
-
-import Tasks from "@/components/todoaix/tasks";
-import UserProfile from "@/components/nav/user-profile";
 import MobileNav from "@/components/nav/mobile-nav";
 import SideBar from "@/components/nav/sidebar";
+import TaskList from "@/components/tasks/task-list";
 
 export default function Page() {
   return (
@@ -11,8 +9,8 @@ export default function Page() {
         <SideBar/>
         <div className="flex flex-col">
           <MobileNav />
-          <main className="flex flex-col items-center justify-between p-24">
-            <Tasks />
+          <main className="flex flex-col gap-4 p-4 lg:px-8">
+            <TaskList/>
           </main>
         </div>
       </div>

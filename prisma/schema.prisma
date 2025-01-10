@@ -14,31 +14,72 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  name          String?
-  image         String?
-  email         String   @unique
-  tasks   Task[]
-  sessions      Session[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id        Int       @id @default(autoincrement())
+  name      String?
+  image     String?
+  email     String    @unique
+  tasks     Task[]
+  sessions  Session[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  SubTask   SubTask[]
+}
+
+model Project {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Task Task[]
 }
 
 model Task {
-  id            Int     @id @default(autoincrement())
-  title         String
-  description   String?
-  completed     Boolean @default(false)
-  owner         User?   @relation(fields: [ownerId], references: [id])
-  ownerId       Int?
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  dueDate     DateTime?
+
+  project   Project? @relation(fields: [projectID], references: [id])
+  projectID Int?
+
+  tag   Tag? @relation(fields: [tagID], references: [id])
+  tagID Int?
+
+  priority Int
+  owner    User?     @relation(fields: [ownerId], references: [id])
+  ownerId  Int?
+  SubTask  SubTask[]
+}
+
+model SubTask {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  dueDate     DateTime?
+
+  projectID String
+  priority  Int
+
+  parent   Task @relation(fields: [parentID], references: [id])
+  parentID Int
+
+  owner   User? @relation(fields: [ownerId], references: [id])
+  ownerId Int?
+}
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  name String
+  Task Task[]
 }
 
 model Session {
-  id          Int      @id @default(autoincrement())
-  userId      Int
-  user        User @relation(fields: [userId], references: [id])
-  token       String @unique
-  expiresAt   DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

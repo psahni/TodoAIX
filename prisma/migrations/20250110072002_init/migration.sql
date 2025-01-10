@@ -1,0 +1,15 @@
+-- DropForeignKey
+ALTER TABLE "Task" DROP CONSTRAINT "Task_projectID_fkey";
+
+-- DropForeignKey
+ALTER TABLE "Task" DROP CONSTRAINT "Task_tagID_fkey";
+
+-- AlterTable
+ALTER TABLE "Task" ALTER COLUMN "projectID" DROP NOT NULL,
+ALTER COLUMN "tagID" DROP NOT NULL;
+
+-- AddForeignKey
+ALTER TABLE "Task" ADD CONSTRAINT "Task_projectID_fkey" FOREIGN KEY ("projectID") REFERENCES "Project"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Task" ADD CONSTRAINT "Task_tagID_fkey" FOREIGN KEY ("tagID") REFERENCES "Tag"("id") ON DELETE SET NULL ON UPDATE CASCADE;
