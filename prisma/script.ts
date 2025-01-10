@@ -76,8 +76,41 @@ async function createTasks() {
   console.log(task3);
 }
 
+async function createCompletedTasks() {
+  const user = await prisma.user.findUnique({ where: { email: 'prashant.sahni@codeandtheory.com'} });
+  if (!user) {
+    throw new Error('User not found');
+  }
 
-createTasks()
+  const defaultProject = await prisma.project.findFirst({ where: { name: "Default Project" } });
+
+  await prisma.task.create({
+    data: {
+      title: 'Meditation',
+      description: 'This is the first task',
+      completed: true,
+      ownerId: user.id,
+      priority: 2,
+      dueDate: new Date().toISOString(),
+      projectID: defaultProject?.id,
+    }
+  });
+
+  await prisma.task.create({
+    data: {
+      title: 'Buy Groceries',
+      description: 'This is the first task',
+      completed: true,
+      ownerId: user.id,
+      priority: 1,
+      dueDate: new Date().toISOString(),
+      projectID: defaultProject?.id,
+    }
+  });
+}
+
+
+createCompletedTasks()
   .then(async () => {
     await prisma.$disconnect()
   })
