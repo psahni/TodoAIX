@@ -1,17 +1,20 @@
 'use client';
 
 import Task from "./task";
+import { checkUncheckTask } from "@/actions/db/task";
+import { ITask } from "@/types/task";
 
-export function Tasks({ items, isCompleted }: { items: any; isCompleted: boolean }) {
-  const handleOnChange = (task: any) => {
+export function Tasks({ items, isCompleted }: { items: ITask[]; isCompleted: boolean }) {
+  const handleOnChange = (task: ITask) => {
     console.log("handleOnChange()");
+    checkUncheckTask(task.id, !task.completed);
   }
 
   return (
     <div className="flex flex-col gap-1 py-4">
         <div className="">
           {
-            items.map((task) => (
+            items.map((task: ITask) => (
               <Task
                 id={task.id}
                 handleOnChange={() => handleOnChange(task)}

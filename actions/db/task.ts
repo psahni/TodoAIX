@@ -1,3 +1,5 @@
+"use server";
+
 import prisma from "@/prisma/client";
 
 interface Task {
@@ -31,10 +33,10 @@ async function createTask(task: Task) {
   return newTask
 }
 
-async function checkUncheckTask(taskId: number) {
+async function checkUncheckTask(taskId: number, status: boolean) {
   const task = await prisma.task.update({
     where: { id: taskId },
-    data: { completed: true }
+    data: { completed: status }
   });
 
   return task

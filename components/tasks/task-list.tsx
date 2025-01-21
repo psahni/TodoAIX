@@ -1,11 +1,34 @@
+"use client";
+
 import { CircleCheckBig } from "lucide-react";
-import Task from "./task";
 import { getTasks, getCompletedTasks } from "@/actions/db/task";
 import { Tasks } from "./tasks";
+import { useEffect, useState } from "react";
+import { ITask } from "@/types/task";
 
-export default async function TaskList() {
-  const tasks = await getTasks();
-  const completedTasks = await getCompletedTasks();
+
+export default function TaskList() {
+  const [tasks, setTasks] = useState<ITask[]>([]);
+  const [completedTasks, setCompletedTasks] = useState<ITask[]>([]);
+
+
+  useEffect(() => {
+    async function fetchData() {
+      let data = await getTasks();
+      setTasks(data);
+      data = await getCompletedTasks();
+      setCompletedTasks(data);
+    }
+    fetchData();
+  }, [tasks]);
+
+
+  if (
+    tasks === undefined ||
+    completedTasks === undefined
+  ) {
+    return (<p>Loading...</p>);
+  }
 
   return (
     <div className="xl:px-40">
